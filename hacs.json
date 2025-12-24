@@ -1,0 +1,7 @@
+{
+  "name": "GTC Ventmachine",
+  "render_readme": true,
+  "domains": ["fan"],
+  "iot_class": "local_polling",
+  "country": "RU"
+}
