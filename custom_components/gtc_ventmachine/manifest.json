@@ -5,6 +5,7 @@
   "documentation": "",
   "dependencies": [],
   "codeowners": ["@Eugen417"],
+  "documentation": "https://github.com/Eugen417/GTC_VENTMACHINE_HA",
   "config_flow": true,
   "iot_class": "local_polling"
 }
