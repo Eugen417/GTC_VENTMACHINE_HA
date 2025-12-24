@@ -1,0 +1,36 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "host": "IP-адрес",
+          "port": "Порт"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "gtc_current_temp": { "name": "Текущая температура" },
+      "gtc_target_temp": { "name": "Целевая температура" },
+      "gtc_room_temp": { "name": "Температура в помещении" },
+      "gtc_room_humidity": { "name": "Влажность в помещении" },
+      "gtc_filter_state": { "name": "Состояние фильтра" },
+      "gtc_current_fan_speed": { "name": "Текущая скорость вентилятора" },
+      "gtc_target_fan_speed": { "name": "Целевая скорость вентилятора" },
+      "gtc_operation_stage": { "name": "Этап работы" },
+      "gtc_state_0": { "name": "Регистр состояния 0" },
+      "gtc_state_1": { "name": "Регистр состояния 1" },
+      "gtc_error_code_1": { "name": "Код ошибки" }
+    },
+    "binary_sensor": {
+      "gtc_power": { "name": "Питание" },
+      "gtc_heat_mode": { "name": "Режим: Нагрев" },
+      "gtc_gvs_open": { "name": "Клапан ГВС: Открытие" },
+      "gtc_gvs_close": { "name": "Клапан ГВС: Закрытие" },
+      "gtc_error_overheat": { "name": "Ошибка: Перегрев" },
+      "gtc_error_underheat": { "name": "Ошибка: Недогрев" },
+      "gtc_error_frost": { "name": "Ошибка: Обмерзание" }
+    }
+  }
+}
