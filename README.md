@@ -41,7 +41,19 @@
 
 ---
 
-**Разработчик:** [@Eugen417](https://www.google.com/search?q=https://github.com/Eugen417)
+## 🤖 Автоматизации (Blueprints)
 
+Для интеграции доступен готовый сценарий (Blueprint), который упрощает создание умных правил управления:
+
+* **Управление по CO2**: Автоматически включает/выключает установку и регулирует скорость вентилятора в зависимости от уровня углекислого газа. Позволяет поддерживать свежесть воздуха и экономить ресурс фильтра, когда в помещении никого нет.
+
+**Установить автоматизацию в один клик:**
+
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2FEugen417%2Fhomeassistant-blueprints%2Fblob%2Fmain%2Fgtc_co2_fan_speed_on-off.yaml)
+
+[Просмотреть исходный код Blueprint](https://github.com/Eugen417/homeassistant-blueprints/blob/main/gtc_co2_fan_speed_on-off.yaml)
+
+---
+
+**Разработчик:** [@Eugen417](https://github.com/Eugen417)
 **Версия:** 1.1.1
-
