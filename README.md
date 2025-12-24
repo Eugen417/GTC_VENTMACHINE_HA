@@ -2,6 +2,8 @@
 
 Пользовательская интеграция для управления приточными установками **Ventmachine** (автоматика GTC, Syberia 5 и аналоги) через протокол Modbus TCP. Интеграция превращает промышленный контроллер в удобное устройство умного дома с полной поддержкой русского языка.
 
+[![Open your Home Assistant instance and open a repository maintainer's profile on GitHub.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Eugen417&repository=GTC_VENTMACHINE_HA&category=Integration)
+
 ## Возможности версии 1.1.1
 
 * **Полная русификация**: Все датчики, кнопки и статусы переведены на русский язык.
