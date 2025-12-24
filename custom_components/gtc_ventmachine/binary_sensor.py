@@ -1,72 +1,48 @@
-from homeassistant.components.binary_sensor import BinarySensorEntity, BinarySensorDeviceClass
+from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.helpers.entity import DeviceInfo, EntityCategory
+from homeassistant.const import STATE_ON, STATE_OFF
 from .const import DOMAIN
 
 async def async_setup_entry(hass, entry, async_add_entities):
     hub = hass.data[DOMAIN][entry.entry_id]
     
-    # Список всех бинарных сенсоров:
-    # (Ключ перевода/ID, Регистр, Значение, Тип проверки, Класс устройства)
-    # Тип "bit": проверяем наличие бита (val & target)
-    # Тип "equal": проверяем точное совпадение (val == target)
+    # (ID, Регистр, Бит/Значение, Тип, Русское имя)
     configs = [
-        # --- Статусы из регистра 2 (State 0) ---
-        ("gtc_power", 2, 1, "bit", BinarySensorDeviceClass.POWER),
-        ("gtc_heat_mode", 2, 256, "bit", None),
-        
-        # --- Клапаны и заслонки из регистра 3 (State 1) ---
-        # Используем RUNNING, так как HA не поддерживает OPENING для binary_sensor
-        ("gtc_gvs_open", 3, 8, "equal", BinarySensorDeviceClass.RUNNING),
-        ("gtc_gvs_close", 3, 9, "equal", BinarySensorDeviceClass.RUNNING),
-        ("gtc_hvs_open", 3, 10, "equal", BinarySensorDeviceClass.RUNNING),
-        ("gtc_hvs_close", 3, 11, "equal", BinarySensorDeviceClass.RUNNING),
-        ("gtc_damper_open", 3, 1, "equal", BinarySensorDeviceClass.RUNNING),
-        ("gtc_damper_close", 3, 6, "equal", BinarySensorDeviceClass.RUNNING),
-        
-        # --- Ошибки из регистра 5 (Error Code 1) ---
-        ("gtc_error_t1", 5, 1, "bit", BinarySensorDeviceClass.PROBLEM),
-        ("gtc_error_t2", 5, 2, "bit", BinarySensorDeviceClass.PROBLEM),
-        ("gtc_error_t3", 5, 4, "bit", BinarySensorDeviceClass.PROBLEM),
-        ("gtc_error_overheat", 5, 16, "bit", BinarySensorDeviceClass.PROBLEM),
-        ("gtc_error_underheat", 5, 32, "bit", BinarySensorDeviceClass.PROBLEM),
-        ("gtc_error_frost", 5, 8192, "bit", BinarySensorDeviceClass.PROBLEM),
+        ("gtc_power", 2, 1, "bit", "Питание"),
+        ("gtc_heat_mode", 2, 256, "bit", "Режим: Нагрев"),
+        ("gtc_gvs_open", 3, 8, "equal", "Клапан ГВС: Открытие"),
+        ("gtc_gvs_close", 3, 9, "equal", "Клапан ГВС: Закрытие"),
+        ("gtc_hvs_open", 3, 10, "equal", "Клапан ХВС: Открытие"),
+        ("gtc_hvs_close", 3, 11, "equal", "Клапан ХВС: Закрытие"),
+        ("gtc_error_overheat", 5, 16, "bit", "Ошибка: Перегрев"),
+        ("gtc_error_underheat", 5, 32, "bit", "Ошибка: Недогрев"),
+        ("gtc_error_frost", 5, 8192, "bit", "Ошибка: Обмерзание"),
+        ("gtc_error_t1", 5, 1, "bit", "Датчик T1 (Авария)"),
+        ("gtc_error_t2", 5, 2, "bit", "Датчик T2 (Авария)"),
+        ("gtc_error_t3", 5, 4, "bit", "Датчик T3 (Авария)"),
     ]
     
-    entities = [GTCBitSensor(hub, entry, *c) for c in configs]
-    async_add_entities(entities, True)
+    async_add_entities([GTCBitSensor(hub, entry, *c) for c in configs], True)
 
 class GTCBitSensor(BinarySensorEntity):
-    _attr_has_entity_name = True
+    # Убираем _attr_has_entity_name, чтобы имя не заменялось на имя устройства
+    _attr_has_entity_name = False 
 
-    def __init__(self, hub, entry, translation_key, address, target, logic, dev_class):
+    def __init__(self, hub, entry, translation_key, address, target, logic, friendly_name):
         self._hub = hub
         self._address = address
         self._target = target
         self._logic = logic
-        
-        # translation_key связывает сенсор с именем в ru.json
         self._attr_translation_key = translation_key
-        self._attr_device_class = dev_class
-        
-        # Помещаем всё в диагностику, чтобы не захламлять главный экран
+        self._attr_name = friendly_name  # Прямое имя
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
-        self._attr_unique_id = f"gtc_bin_v10_{address}_{target}_{logic}"
+        self._attr_unique_id = f"gtc_final_v14_{address}_{target}"
 
     @property
     def device_info(self):
-        return DeviceInfo(
-            identifiers={(DOMAIN, "gtc_syberia")},
-            name="GTC Syberia 5"
-        )
+        return DeviceInfo(identifiers={(DOMAIN, "gtc_syberia")}, name="GTC Syberia 5")
 
     @property
     def is_on(self):
-        """Проверка состояния сенсора в зависимости от типа логики."""
         val = self._hub.data.get(f"in_{self._address}", 0)
-        
-        if self._logic == "bit":
-            # Проверка конкретного бита
-            return bool(val & self._target)
-        
-        # Проверка точного значения (для регистра 3)
-        return val == self._target
+        return bool(val & self._target) if self._logic == "bit" else val == self._target
