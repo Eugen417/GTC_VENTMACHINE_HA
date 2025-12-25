@@ -19,7 +19,7 @@ class GTCVentHub:
     def _fetch_sync(self):
         try:
             with socket.create_connection((self.host, self.port), timeout=5) as s:
-                # Читаем блоки регистров: State, Fan, Sensors, Target Temp
+                # Читаем: 2-14 (статус, ошибки, темп, фильтр), 25 (скорость), 57-58 (комната), 31-32 (уставки)
                 for func, blocks in [(0x04, [(2, 13), (25, 1), (57, 2)]), (0x03, [(31, 2)])]:
                     for start, count in blocks:
                         packet = struct.pack('>HHHBBHH', 0x01, 0x00, 0x06, 0x01, func, start, count)
@@ -28,7 +28,6 @@ class GTCVentHub:
                         if len(res) >= 9 + (count * 2):
                             payload = res[9:9 + (count * 2)]
                             for i in range(count):
-                                # Читаем как Unsigned Short (H)
                                 self.data[f"in_{start + i}"] = struct.unpack('>H', payload[i*2:i*2+2])[0]
                 return True
         except Exception as e:
