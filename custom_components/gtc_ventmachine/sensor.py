@@ -16,6 +16,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     
     sensors = [
         ("gtc_current_temp", 7, "temp_01", UnitOfTemperature.CELSIUS, "Текущая температура"),
+        ("gtc_outside_temp", 11, "temp_01", UnitOfTemperature.CELSIUS, "Наружная температура"),
         ("gtc_target_temp", 31, "temp_01", UnitOfTemperature.CELSIUS, "Целевая температура"), 
         ("gtc_room_temp", 57, "temp_01", UnitOfTemperature.CELSIUS, "Температура в помещении"),
         ("gtc_room_humidity", 58, "as_is", PERCENTAGE, "Влажность"),
