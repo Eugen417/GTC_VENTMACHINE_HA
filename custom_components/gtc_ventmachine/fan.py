@@ -24,37 +24,46 @@ class GTCFan(FanEntity):
 
     @property
     def is_on(self):
-        # Проверяем питание (регистр 2), а не вращение (регистр 25)
-        # Это гарантирует, что HA сразу видит выключение, не дожидаясь остановки мотора
-        return bool(self._hub.data.get("in_2", 0) & 1)
+        # Твоя верная логика по датчику вращения
+        speed = self._hub.data.get("in_25", 0)
+        return speed > 0
 
     @property
     def percentage(self):
-        # Берем уставку (регистр 32), чтобы ползунок в HA не прыгал при разгоне
+        # Красивые 10%, 20%... на основе регистра уставки 32
         speed = self._hub.data.get("in_32", 0)
-        return int((speed / 7) * 100) if 1 <= speed <= 7 else 0
+        return int(speed * 10) if 1 <= speed <= 7 else 0
 
     @property
     def speed_count(self):
-        return 7
+        return 10
 
     async def async_set_percentage(self, percentage):
         if percentage == 0:
             await self.async_turn_off()
         else:
-            # Конвертируем % в ступени 1-7
-            step = max(1, min(7, round((percentage / 100) * 7)))
-            await self._hub.async_write(2, 1)  # Питание ВКЛ
-            await asyncio.sleep(0.1)
-            await self._hub.async_write(32, step) # Скорость
+            # Мапим проценты в ступени 1-7
+            speed = int(percentage / 10)
+            if speed > 7: speed = 7
+            if speed < 1: speed = 1
+            
+            await self._hub.async_write(2, 1) # Питание ВКЛ
+            await asyncio.sleep(0.2)
+            await self._hub.async_write(32, speed) # Скорость 1-7
 
+    # Добавляем *args и **kwargs, чтобы HA не ругался на количество аргументов
     async def async_turn_on(self, percentage=None, *args, **kwargs):
         await self._hub.async_write(2, 1)
+        
         if percentage:
             await self.async_set_percentage(percentage)
-        elif self._hub.data.get("in_32", 0) == 0:
-            await self._hub.async_write(32, 1)
+        else:
+            # Если скорость не задана, ставим 1-ю
+            if self._hub.data.get("in_32", 0) == 0:
+                await self._hub.async_write(32, 1)
 
+    # Здесь тоже добавляем поддержку любых входящих аргументов
     async def async_turn_off(self, *args, **kwargs):
-        # Просто выключаем питание. Контроллер GTC сам обеспечит выбег и продувку.
+        await self._hub.async_write(2, 1)
+        await asyncio.sleep(0.5)
         await self._hub.async_write(2, 0)
