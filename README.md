@@ -1,3 +1,4 @@
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA)
 # GTC Ventmachine для Home Assistant
 
 Пользовательская интеграция для управления приточными установками **Ventmachine** (автоматика GTC, Syberia 5 и аналоги) через протокол Modbus TCP. Интеграция превращает промышленный контроллер в удобное устройство умного дома с полной поддержкой русского языка.
