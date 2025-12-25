@@ -1,64 +1,29 @@
 {
   "entity": {
-    "sensor": {
-      "gtc_operation_stage": { "name": "Этап работы" },
-      "gtc_current_temp": { "name": "Текущая температура" },
-      "gtc_outside_temp": { "name": "Наружная температура" },
-      "gtc_target_temp": { "name": "Целевая температура" },
-      "gtc_room_temp": { "name": "Температура в помещении" },
-      "gtc_room_humidity": { "name": "Влажность" },
-      "gtc_filter_state": { "name": "Загрязнение фильтра" },
-      "gtc_current_fan_speed": { "name": "Текущая скорость" },
-      "gtc_target_fan_speed": { "name": "Целевая скорость" }
-    },
     "binary_sensor": {
-      "gtc_power": { 
-        "name": "Питание", 
-        "state": { "on": "Включено", "off": "Выключено" } 
+      "gtc_error": {
+        "state": {
+          "on": "АВАРИЯ",
+          "off": "ОК"
+        }
       },
-      "gtc_heat_mode": { 
-        "name": "Режим", 
-        "state": { "on": "Нагрев", "off": "Охлаждение" } 
+      "gtc_timer": {
+        "state": {
+          "on": "Активен",
+          "off": "Выключен"
+        }
       },
-      "gtc_gvs_open": { 
-        "name": "Клапан ГВС (открытие)", 
-        "state": { "on": "Активно", "off": "Нет" } 
+      "gtc_lock": {
+        "state": {
+          "on": "Заблокировано",
+          "off": "Разблокировано"
+        }
       },
-      "gtc_gvs_close": { 
-        "name": "Клапан ГВС (закрытие)", 
-        "state": { "on": "Активно", "off": "Нет" } 
-      },
-      "gtc_hvs_open": { 
-        "name": "Клапан ХВС (открытие)", 
-        "state": { "on": "Активно", "off": "Нет" } 
-      },
-      "gtc_hvs_close": { 
-        "name": "Клапан ХВС (закрытие)", 
-        "state": { "on": "Активно", "off": "Нет" } 
-      },
-      "gtc_error_overheat": { 
-        "name": "Перегрев", 
-        "state": { "on": "АВАРИЯ", "off": "Норма" } 
-      },
-      "gtc_error_underheat": { 
-        "name": "Недогрев", 
-        "state": { "on": "АВАРИЯ", "off": "Норма" } 
-      },
-      "gtc_error_frost": { 
-        "name": "Обмерзание", 
-        "state": { "on": "ОПАСНОСТЬ", "off": "Норма" } 
-      },
-      "gtc_error_t1": { 
-        "name": "Датчик T1", 
-        "state": { "on": "Ошибка", "off": "ОК" } 
-      },
-      "gtc_error_t2": { 
-        "name": "Датчик T2", 
-        "state": { "on": "Ошибка", "off": "ОК" } 
-      },
-      "gtc_error_t3": { 
-        "name": "Датчик T3", 
-        "state": { "on": "Ошибка", "off": "ОК" } 
+      "gtc_generic": {
+        "state": {
+          "on": "Включено",
+          "off": "Выключено"
+        }
       }
     }
   }
