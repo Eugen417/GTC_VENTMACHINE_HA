@@ -4,7 +4,7 @@
 
 [![Open your Home Assistant instance and open a repository maintainer's profile on GitHub.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Eugen417&repository=GTC_VENTMACHINE_HA&category=Integration)
 
-## Возможности версии 1.1.3
+## Возможности версии 1.1.4
 
 * **Полная русификация**: Все датчики, кнопки и статусы переведены на русский язык.
 * **Прозрачная работа клапанов**: Отслеживание в реальном времени открытия/закрытия клапанов горячей и холодной воды, а также состояния воздушной заслонки.
@@ -57,4 +57,4 @@ ___
 ---
 
 **Разработчик:** [@Eugen417](https://github.com/Eugen417)
-**Версия:** 1.1.3
+**Версия:** 1.1.4
