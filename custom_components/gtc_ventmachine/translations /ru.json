@@ -3,6 +3,7 @@
     "sensor": {
       "gtc_operation_stage": { "name": "Этап работы" },
       "gtc_current_temp": { "name": "Текущая температура" },
+      "gtc_outside_temp": { "name": "Наружная температура" },
       "gtc_target_temp": { "name": "Целевая температура" },
       "gtc_room_temp": { "name": "Температура в помещении" },
       "gtc_room_humidity": { "name": "Влажность" },
