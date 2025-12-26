@@ -19,8 +19,13 @@ class GTCVentHub:
     def _fetch_sync(self):
         try:
             with socket.create_connection((self.host, self.port), timeout=5) as s:
-                # Опрашиваем все нужные регистры
-                for func, blocks in [(0x04, [(2, 13), (25, 1), (57, 2)]), (0x03, [(31, 2)])]:
+                # Читаем Input Registers (0x04) и Holding Registers (0x03)
+                poll_map = [
+                    (0x04, [(2, 13), (25, 1), (57, 2), (69, 2)]), 
+                    (0x03, [(31, 2)])
+                ]
+
+                for func, blocks in poll_map:
                     for start, count in blocks:
                         packet = struct.pack('>HHHBBHH', 0x01, 0x00, 0x06, 0x01, func, start, count)
                         s.send(packet)
