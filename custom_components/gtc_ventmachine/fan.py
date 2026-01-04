@@ -32,7 +32,7 @@ class GTCFan(FanEntity):
     def percentage(self):
         # Красивые 10%, 20%... на основе регистра уставки 32
         speed = self._hub.data.get("in_32", 0)
-        return int(speed * 10) if 1 <= speed <= 7 else 0
+        return int(speed * 10) if 1 <= speed <= 10 else 0
 
     @property
     def speed_count(self):
@@ -42,9 +42,9 @@ class GTCFan(FanEntity):
         if percentage == 0:
             await self.async_turn_off()
         else:
-            # Мапим проценты в ступени 1-7
+            # Мапим проценты в ступени 1-10
             speed = int(percentage / 10)
-            if speed > 7: speed = 7
+            if speed > 10: speed = 10
             if speed < 1: speed = 1
             
             await self._hub.async_write(2, 1) # Питание ВКЛ
