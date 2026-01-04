@@ -49,7 +49,7 @@ class GTCFan(FanEntity):
             
             await self._hub.async_write(2, 1) # Питание ВКЛ
             await asyncio.sleep(0.2)
-            await self._hub.async_write(32, speed) # Скорость 1-7
+            await self._hub.async_write(32, speed) # Скорость 1-10
 
     # Добавляем *args и **kwargs, чтобы HA не ругался на количество аргументов
     async def async_turn_on(self, percentage=None, *args, **kwargs):
