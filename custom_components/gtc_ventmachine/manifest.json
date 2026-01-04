@@ -1,7 +1,7 @@
 {
   "domain": "gtc_ventmachine",
   "name": "GTC Ventmachine",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "documentation": "",
   "dependencies": [],
   "codeowners": ["@Eugen417"],
