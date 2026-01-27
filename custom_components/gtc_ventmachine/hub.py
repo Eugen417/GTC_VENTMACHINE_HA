@@ -11,15 +11,19 @@ class GTCVentHub:
         self.port = port
         self.data = {}
         self._lock = asyncio.Lock()
+        self.poll_interval = 5 
+        # Место для хранения ссылки на фоновую задачу
+        self.poll_task = None
 
     async def async_update(self):
+        """Метод обновления данных."""
         async with self._lock:
             return await asyncio.to_thread(self._fetch_sync)
 
     def _fetch_sync(self):
         try:
-            with socket.create_connection((self.host, self.port), timeout=5) as s:
-                # Читаем Input Registers (0x04) и Holding Registers (0x03)
+            # Уменьшаем таймаут до 2 сек, чтобы не вешать поток надолго
+            with socket.create_connection((self.host, self.port), timeout=2) as s:
                 poll_map = [
                     (0x04, [(2, 13), (25, 1), (57, 2), (69, 2)]), 
                     (0x03, [(31, 2)])
@@ -35,8 +39,11 @@ class GTCVentHub:
                             for i in range(count):
                                 self.data[f"in_{start + i}"] = struct.unpack('>H', payload[i*2:i*2+2])[0]
                 return True
+        except (socket.timeout, OSError) as e:
+            # Логируем как warning, чтобы не спамить error в случае штатных разрывов
+            _LOGGER.warning("GTC Connection/Read Error: %s", e)
         except Exception as e:
-            _LOGGER.error("GTC Hub Read Error: %s", e)
+            _LOGGER.error("GTC Unexpected Error: %s", e)
         return False
 
     async def async_write(self, address, value):
@@ -47,9 +54,13 @@ class GTCVentHub:
     def _write_sync(self, address, value):
         try:
             packet = struct.pack('>HHHBBHH', 0x01, 0x00, 0x06, 0x01, 0x06, address, int(value))
-            with socket.create_connection((self.host, self.port), timeout=5) as s:
+            with socket.create_connection((self.host, self.port), timeout=2) as s:
                 s.send(packet)
                 return True
         except Exception as e:
             _LOGGER.error("GTC Write Error: %s", e)
         return False
+        
+    def close(self):
+        """Метод для очистки ресурсов, если потребуется в будущем"""
+        pass
