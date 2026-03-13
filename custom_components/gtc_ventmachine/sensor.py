@@ -3,10 +3,21 @@ from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.const import UnitOfTemperature, PERCENTAGE
 from .const import DOMAIN
 
+# Полная карта состояний из регистра 4 (State_1)
 STATE_MAP = {
-    0: "Ожидание", 1: "Открытие заслонки", 2: "Предподогрев",
-    3: "Работа", 4: "Северный старт", 5: "Выбег",
-    6: "Закрытие заслонки", 7: "Продувка", 12: "Разгон ротора"
+    0: "Ожидание", 
+    1: "Открытие заслонки", 
+    2: "Предподогрев",
+    3: "Запуск вентилятора", 
+    4: "Северный старт", 
+    5: "Выбег",
+    6: "Закрытие заслонки", 
+    7: "Продувка эл. калорифера", 
+    8: "Открытие клапана ГВС",
+    9: "Закрытие клапана ГВС",
+    10: "Открытие клапана ХВС",
+    11: "Закрытие клапана ХВС",
+    12: "Разгон ротора"
 }
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -24,8 +35,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
     ]
     async_add_entities([GTCSensor(hub, entry, *s) for s in sensors], True)
 
+
 class GTCSensor(SensorEntity):
     _attr_has_entity_name = False
+    
     def __init__(self, hub, entry, key, address, mode, unit, friendly_name):
         self._hub = hub
         self._address = address
@@ -42,12 +55,17 @@ class GTCSensor(SensorEntity):
     def native_value(self):
         val = self._hub.data.get(f"in_{self._address}")
         if val is None: return None
+        
         if self._mode == "temp":
             if val > 32767: val -= 65536
             return round(float(val) * 0.1, 1)
+            
         if self._mode == "stage":
-            if val == 0:
+            # Накладываем маску 0x1F (младшие 5 бит), чтобы отсечь резервные биты 5-15
+            clean_val = val & 0x1F
+            if clean_val == 0:
                 pwr = self._hub.data.get("in_2", 0)
-                return "Работа" if (pwr & 1) else "Ожидание"
-            return STATE_MAP.get(val, f"Код {val}")
+                return "Работает" if (pwr & 1) else "Ожидание"
+            return STATE_MAP.get(clean_val, f"Код {clean_val}")
+            
         return val
