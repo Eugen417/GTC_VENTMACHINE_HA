@@ -18,9 +18,10 @@ class GTCVentHub:
         self.mac = None
         self.ip = host
         self.sw_version = None
+        self.hw_config = "" # Здесь будет храниться автоопределенное железо
 
     async def async_init_device_info(self):
-        """Одиночный запрос при старте для получения MAC и прошивки."""
+        """Одиночный запрос при старте для получения MAC, прошивки и железа."""
         def _fetch():
             try:
                 with socket.create_connection((self.host, self.port), timeout=3) as s:
@@ -39,13 +40,36 @@ class GTCVentHub:
                         m1 = struct.unpack('>H', res_mac[11:13])[0]
                         m2 = struct.unpack('>H', res_mac[13:15])[0]
                         self.mac = f"{m0 & 0xFF:02x}:{m0 >> 8:02x}:{m1 & 0xFF:02x}:{m1 >> 8:02x}:{m2 & 0xFF:02x}:{m2 >> 8:02x}"
+                        
+                    # Автоопределение железа (Holding Reg 1 Type_Dev, адрес 0)
+                    s.send(struct.pack('>HHHBBHH', 1, 0, 6, 1, 0x03, 0, 1))
+                    res_hw = s.recv(1024)
+                    if len(res_hw) >= 11:
+                        hw_val = struct.unpack('>H', res_hw[9:11])[0]
+                        heater = hw_val & 0x0F
+                        cooler = (hw_val >> 4) & 0x0F
+                        recup = (hw_val >> 8) & 0x0F
+                        
+                        parts = []
+                        if heater == 1: parts.append("Эл. калорифер")
+                        elif heater == 2: parts.append("Вод. калорифер")
+                        elif heater == 3: parts.append("Комб. калорифер")
+                        
+                        if cooler == 1: parts.append("ККБ")
+                        elif cooler == 2: parts.append("Фанкойл")
+                        elif cooler == 3: parts.append("Вод. охладитель")
+                        elif cooler == 4: parts.append("Инвертор. ККБ")
+                        
+                        if recup == 1: parts.append("Пласт. рекуператор")
+                        elif recup == 2: parts.append("Ротор. рекуператор")
+                        
+                        self.hw_config = " + ".join(parts) if parts else "Стандартная"
             except Exception as e:
-                _LOGGER.warning("Не удалось прочитать системную информацию (MAC/Прошивка): %s", e)
+                _LOGGER.warning("Не удалось прочитать системную информацию (MAC/Прошивка/Железо): %s", e)
 
         await asyncio.to_thread(_fetch)
 
     async def async_update(self):
-        """Метод обновления данных."""
         async with self._lock:
             return await asyncio.to_thread(self._fetch_sync)
 
@@ -53,7 +77,8 @@ class GTCVentHub:
         try:
             with socket.create_connection((self.host, self.port), timeout=2) as s:
                 poll_map = [
-                    (0x04, [(2, 13), (25, 1), (57, 2), (69, 2)]), 
+                    # Добавили (81, 2) для RPM, и расширили (25, 4) для таймеров
+                    (0x04, [(2, 13), (25, 4), (57, 2), (69, 2), (81, 2)]), 
                     (0x03, [(31, 2)])
                 ]
 

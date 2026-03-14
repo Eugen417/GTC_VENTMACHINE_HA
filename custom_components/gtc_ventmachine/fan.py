@@ -24,7 +24,7 @@ class GTCFan(FanEntity):
             "name": "GTC Syberia 5",
             "manufacturer": "GTC",
             # Добавляем IP и порт прямо в строку модели для отображения в карточке
-            "model": f"Syberia 5 ({self._hub.host}:{self._hub.port})",
+            "model": f"Syberia 5 [{self._hub.hw_config}] ({self._hub.host}:{self._hub.port})",
             # Эта строка создаст кнопку "Открыть веб-интерфейс" (если он висит на 80 порту)
             "configuration_url": f"http://{self._hub.host}"
         }
