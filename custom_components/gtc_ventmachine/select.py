@@ -1,12 +1,11 @@
 import logging
 from homeassistant.components.select import SelectEntity
-from homeassistant.helpers.entity import EntityCategory, DeviceInfo
+from homeassistant.helpers.entity import EntityCategory
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    """Настройка платформы select (ровно 3 аргумента!)."""
     hub = hass.data[DOMAIN][entry.entry_id]
     async_add_entities([GTCPollIntervalSelect(hub, entry)], True)
 
@@ -20,10 +19,24 @@ class GTCPollIntervalSelect(SelectEntity):
         self._hub = hub
         self._attr_unique_id = f"gtc_{entry.data['host']}_poll_select"
         self._attr_options = ["2", "3", "4", "5", "6", "7", "8", "9", "10"]
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, "gtc_syberia")},
-            name="GTC Ventmachine",
-        )
+
+    @property
+    def device_info(self):
+        info = {
+            "identifiers": {(DOMAIN, "gtc_syberia")},
+            "name": "GTC Syberia 5",
+            "manufacturer": "GTC",
+            # Добавляем IP и порт прямо в строку модели для отображения в карточке
+            "model": f"Syberia 5 ({self._hub.host}:{self._hub.port})",
+            # Эта строка создаст кнопку "Открыть веб-интерфейс" (если он висит на 80 порту)
+            "configuration_url": f"http://{self._hub.host}"
+        }
+        if self._hub.sw_version:
+            info["sw_version"] = self._hub.sw_version
+        if self._hub.mac:
+            import homeassistant.helpers.device_registry as dr
+            info["connections"] = {(dr.CONNECTION_NETWORK_MAC, self._hub.mac)}
+        return info
 
     @property
     def current_option(self) -> str:

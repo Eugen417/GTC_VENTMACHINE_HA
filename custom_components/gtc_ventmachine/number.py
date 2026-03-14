@@ -1,5 +1,4 @@
 from homeassistant.components.number import NumberEntity
-from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.const import UnitOfTemperature
 from .const import DOMAIN
 
@@ -19,17 +18,28 @@ class GTCTempTarget(NumberEntity):
 
     @property
     def device_info(self):
-        return DeviceInfo(identifiers={(DOMAIN, "gtc_syberia")}, name="GTC Syberia 5")
+        info = {
+            "identifiers": {(DOMAIN, "gtc_syberia")},
+            "name": "GTC Syberia 5",
+            "manufacturer": "GTC",
+            # Добавляем IP и порт прямо в строку модели для отображения в карточке
+            "model": f"Syberia 5 ({self._hub.host}:{self._hub.port})",
+            # Эта строка создаст кнопку "Открыть веб-интерфейс" (если он висит на 80 порту)
+            "configuration_url": f"http://{self._hub.host}"
+        }
+        if self._hub.sw_version:
+            info["sw_version"] = self._hub.sw_version
+        if self._hub.mac:
+            import homeassistant.helpers.device_registry as dr
+            info["connections"] = {(dr.CONNECTION_NETWORK_MAC, self._hub.mac)}
+        return info
 
     @property
     def native_value(self):
-        # Состояние берется из ключа 'in_31'
         val = self._hub.data.get("in_31")
         if val is None or val == 0:
             return None
-        # Если в регистре 130, в HA будет 13.0
         return round(float(val) * 0.1, 1)
 
     async def async_set_native_value(self, value):
-        # Запись: 13.5 -> 135
         await self._hub.async_write(31, int(value * 10))

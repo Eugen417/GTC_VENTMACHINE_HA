@@ -13,7 +13,7 @@ class GTCClimate(ClimateEntity):
     _attr_has_entity_name = True
     _attr_name = "Климат"
     
-    # ПРАВКА: Диапазон 5-30 и шаг 0.5
+    # Строгий диапазон 5.0 - 30.0!
     _attr_min_temp = 5.0
     _attr_max_temp = 30.0
     _attr_target_temperature_step = 0.5
@@ -30,13 +30,26 @@ class GTCClimate(ClimateEntity):
             ClimateEntityFeature.TURN_OFF
         )
         
-        # ВОЗВРАЩЕНО: 10 скоростей
         self._attr_fan_modes = [str(i) for i in range(1, 11)]
         self._attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
 
     @property
     def device_info(self):
-        return {"identifiers": {(DOMAIN, "gtc_syberia")}, "name": "GTC Syberia 5"}
+        info = {
+            "identifiers": {(DOMAIN, "gtc_syberia")},
+            "name": "GTC Syberia 5",
+            "manufacturer": "GTC",
+            # Добавляем IP и порт прямо в строку модели для отображения в карточке
+            "model": f"Syberia 5 ({self._hub.host}:{self._hub.port})",
+            # Эта строка создаст кнопку "Открыть веб-интерфейс" (если он висит на 80 порту)
+            "configuration_url": f"http://{self._hub.host}"
+        }
+        if self._hub.sw_version:
+            info["sw_version"] = self._hub.sw_version
+        if self._hub.mac:
+            import homeassistant.helpers.device_registry as dr
+            info["connections"] = {(dr.CONNECTION_NETWORK_MAC, self._hub.mac)}
+        return info
 
     @property
     def current_temperature(self):
@@ -53,7 +66,6 @@ class GTCClimate(ClimateEntity):
 
     async def async_set_temperature(self, **kwargs):
         if (temp := kwargs.get(ATTR_TEMPERATURE)) is not None:
-            # Ограничение температуры согласно заданному диапазону
             temp = max(self._attr_min_temp, min(self._attr_max_temp, temp))
             await self._hub.async_write(31, int(temp * 10))
 
@@ -75,7 +87,6 @@ class GTCClimate(ClimateEntity):
     async def async_set_fan_mode(self, fan_mode, *args, **kwargs):
         if fan_mode.isdigit():
             val = int(fan_mode)
-            # ПРАВКА: Лимит до 10 скоростей
             if 1 <= val <= 10:
                 await self._hub.async_write(32, val)
 
