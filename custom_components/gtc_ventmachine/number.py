@@ -22,9 +22,8 @@ class GTCTempTarget(NumberEntity):
             "identifiers": {(DOMAIN, "gtc_syberia")},
             "name": "GTC Syberia 5",
             "manufacturer": "GTC",
-            # Добавляем IP и порт прямо в строку модели для отображения в карточке
-            "model": f"Syberia 5 ({self._hub.host}:{self._hub.port})",
-            # Эта строка создаст кнопку "Открыть веб-интерфейс" (если он висит на 80 порту)
+            # ИСПРАВЛЕНО: добавлено [{self._hub.hw_config}]
+            "model": f"Syberia 5 [{self._hub.hw_config}] ({self._hub.host}:{self._hub.port})",
             "configuration_url": f"http://{self._hub.host}"
         }
         if self._hub.sw_version:
