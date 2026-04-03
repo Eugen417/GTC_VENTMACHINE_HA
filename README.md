@@ -4,6 +4,9 @@
 Пользовательская интеграция для управления приточными установками **Ventmachine** (автоматика GTC, Syberia 5 и аналоги) через протокол Modbus TCP.
 
 ## 📥 Установка
+
+> **⚠️ ВНИМАНИЕ:** Перед установкой данной интеграции обязательно удалите или закомментируйте старую YAML-конфигурацию Modbus для этой вентустановки в файлах Home Assistant. Протокол Modbus TCP в контроллерах GTC поддерживает только одно активное соединение. Если старый код продолжит работу, новая интеграция выдаст ошибку `Connection refused`.
+
 [![Open your Home Assistant instance and open a repository maintainer's profile on GitHub.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Eugen417&repository=GTC_VENTMACHINE_HA&category=Integration)
 1. **HACS**: Нажмите кнопку выше или добавьте репозиторий `https://github.com/Eugen417/GTC_VENTMACHINE_HA` в Custom Repositories.
 2. **Настройка**: Добавьте интеграцию через «Устройства и службы», указав IP-адрес контроллера.
