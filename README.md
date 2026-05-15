@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/Eugen417/GTC_VENTMACHINE_HA.svg?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/blob/main/LICENSE)
 # GTC Ventmachine для Home Assistant
 
-Пользовательская интеграция для управления приточными установками **Ventmachine** (автоматика GTC, Syberia 5 и аналоги) через протокол Modbus TCP.
+Пользовательская интеграция для управления приточными установками **Ventmachine** (автоматика GTC, Syberia 5) через протокол Modbus TCP.
 
 ## 📥 Установка
 
