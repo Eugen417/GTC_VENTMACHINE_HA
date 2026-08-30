@@ -6,9 +6,10 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 class GTCVentHub:
-    def __init__(self, host, port):
+    def __init__(self, host, port, slave_id=1):
         self.host = host
         self.port = port
+        self.slave_id = slave_id
         self.data = {}
         self._lock = asyncio.Lock()
         self.poll_interval = 5 
@@ -26,14 +27,14 @@ class GTCVentHub:
             try:
                 with socket.create_connection((self.host, self.port), timeout=3) as s:
                     # Версия прошивки (Input Reg 1, count 1)
-                    s.send(struct.pack('>HHHBBHH', 1, 0, 6, 1, 0x04, 1, 1))
+                    s.send(struct.pack('>HHHBBHH', 0, 0, 6, self.slave_id, 0x04, 1, 1))
                     res_fw = s.recv(1024)
                     if len(res_fw) >= 11:
                         fw_val = struct.unpack('>H', res_fw[9:11])[0]
                         self.sw_version = f"{fw_val >> 8}.{fw_val & 0xFF}"
 
                     # MAC-адрес (Holding Reg 354-356, count 3)
-                    s.send(struct.pack('>HHHBBHH', 1, 0, 6, 1, 0x03, 354, 3))
+                    s.send(struct.pack('>HHHBBHH', 0, 0, 6, self.slave_id, 0x03, 354, 3))
                     res_mac = s.recv(1024)
                     if len(res_mac) >= 15:
                         m0 = struct.unpack('>H', res_mac[9:11])[0]
@@ -42,7 +43,7 @@ class GTCVentHub:
                         self.mac = f"{m0 & 0xFF:02x}:{m0 >> 8:02x}:{m1 & 0xFF:02x}:{m1 >> 8:02x}:{m2 & 0xFF:02x}:{m2 >> 8:02x}"
                         
                     # Автоопределение железа (Holding Reg 1 Type_Dev, адрес 0)
-                    s.send(struct.pack('>HHHBBHH', 1, 0, 6, 1, 0x03, 0, 1))
+                    s.send(struct.pack('>HHHBBHH', 0, 0, 6, self.slave_id, 0x03, 0, 1))
                     res_hw = s.recv(1024)
                     if len(res_hw) >= 11:
                         hw_val = struct.unpack('>H', res_hw[9:11])[0]
@@ -84,7 +85,7 @@ class GTCVentHub:
 
                 for func, blocks in poll_map:
                     for start, count in blocks:
-                        packet = struct.pack('>HHHBBHH', 0x01, 0x00, 0x06, 0x01, func, start, count)
+                        packet = struct.pack('>HHHBBHH', 0x00, 0x00, 0x06, self.slave_id, func, start, count)
                         s.send(packet)
                         res = s.recv(1024)
                         if len(res) >= 9 + (count * 2):
@@ -105,7 +106,7 @@ class GTCVentHub:
 
     def _write_sync(self, address, value):
         try:
-            packet = struct.pack('>HHHBBHH', 0x01, 0x00, 0x06, 0x01, 0x06, address, int(value))
+            packet = struct.pack('>HHHBBHH', 0x00, 0x00, 0x06, self.slave_id, 0x06, address, int(value))
             with socket.create_connection((self.host, self.port), timeout=2) as s:
                 s.send(packet)
                 return True
