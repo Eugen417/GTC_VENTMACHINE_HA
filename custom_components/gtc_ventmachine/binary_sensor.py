@@ -12,15 +12,18 @@ from .entity import GTCBaseEntity
 
 async def async_setup_entry(hass, entry, async_add_entities):
     hub = hass.data[DOMAIN][entry.entry_id]
+    has_exh = bool(hub.has_exhaust_fan)
+    has_water = bool(hub.has_water_heater)
+    has_recup = bool(hub.has_recup)
 
     # ФОРМАТ: (ID, Регистр 0-based (PDF - 1), Битовая маска, Логика, Имя, Включен по умолчанию)
     configs = [
         ("err_t1", 4, 1, "bit", "Ошибка: Датчик T1", True),
-        ("err_t2", 4, 2, "bit", "Ошибка: Датчик T2", True),
+        ("err_t2", 4, 2, "bit", "Ошибка: Датчик T2", has_water),
         ("err_t3", 4, 4, "bit", "Ошибка: Датчик T3", True),
         ("err_flt1", 4, 16, "bit", "Авария: 100% Фильтр 1", True),
-        ("err_water", 4, 32, "bit", "Авария: Нет теплоносителя", False),
-        ("err_frz_w", 4, 64, "bit", "Угроза: Заморозка (вода)", True),
+        ("err_water", 4, 32, "bit", "Авария: Нет теплоносителя", has_water),
+        ("err_frz_w", 4, 64, "bit", "Угроза: Заморозка (вода)", has_water),
         ("err_frz_cap", 4, 128, "bit", "Угроза: Заморозка (капилляр)", False),
         ("err_frz_a", 4, 256, "bit", "Угроза: Заморозка (воздух)", True),
         ("err_fan1", 4, 1024, "bit", "Авария: Вентилятор 1", True),
@@ -31,11 +34,11 @@ async def async_setup_entry(hass, entry, async_add_entities):
         ("err_ovrht", 5, 16, "bit", "Авария: Перегрев системы", True),
         ("err_low", 5, 32, "bit", "Авария: Недогрев системы", True),
         ("err_t4", 69, 1, "bit", "Ошибка: Датчик T4", True),
-        ("err_t5", 69, 2, "bit", "Ошибка: Датчик T5", True),
-        ("err_flt2", 69, 16, "bit", "Авария: 100% Фильтр 2", True),
-        ("err_preht", 69, 64, "bit", "Ошибка: Датчик предподогрева", True),
-        ("err_fan2", 69, 1024, "bit", "Авария: Вентилятор 2", True),
-        ("err_rec", 70, 4, "bit", "Угроза: Заморозка рекуператора", True),
+        ("err_t5", 69, 2, "bit", "Ошибка: Датчик T5", has_recup),
+        ("err_flt2", 69, 16, "bit", "Авария: 100% Фильтр 2", has_exh),
+        ("err_preht", 69, 64, "bit", "Ошибка: Датчик предподогрева", has_recup),
+        ("err_fan2", 69, 1024, "bit", "Авария: Вентилятор 2", has_exh),
+        ("err_rec", 70, 4, "bit", "Угроза: Заморозка рекуператора", has_recup),
     ]
 
     async_add_entities([GTCErrorSensor(hub, entry, *c) for c in configs])

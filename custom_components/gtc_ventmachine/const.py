@@ -53,8 +53,12 @@ IR_ZAGR_FILTR_2 = 84       # PDF 0x55 (85): ZagrFiltr2 (загрязнение �
 # Holding Registers (Функции 0x03 / 0x06)
 HR_TYPE_DEV = 0            # PDF 0x01 (01): Type_Dev (конфигурация оборудования)
 HR_POWER_DEV = 2           # PDF 0x03 (03): Power_Dev (Bit 0: 1 - вкл, 0 - выкл)
+HR_FAN_CONFIG_1 = 16       # PDF 0x11 (17): Fan_Type_1 (ст.) / Fan_Number_1 (мл.)
+HR_FAN_CONFIG_2 = 17       # PDF 0x12 (18): Fan_Type_2 (ст.) / Fan_Number_2 (мл. байт: кол-во скоростей вент. 2)
 HR_TEMP_TARGET = 31        # PDF 0x20 (32): Temp_Target (уставка темп., °C x 10)
 HR_FAN_TARGET_1 = 32       # PDF 0x21 (33): Fan_Target_1 (уставка скорости 1..10)
 HR_FAN_TARGET_2 = 33       # PDF 0x22 (34): Fan_Target_2 (уставка скорости вент. 2)
+HR_DEV_KEYS_3 = 87         # PDF 0x58 (88): Bit 10 (1024): управление притоком и вытяжкой: 0 - раздельное, 1 - синхронное
 HR_MAC_START = 353         # PDF 0x162..0x164 (354..356): MAC[0..5] (3 регистра)
+
 

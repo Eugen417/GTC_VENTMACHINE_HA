@@ -10,6 +10,8 @@ from typing import Callable
 from .const import (
     DEFAULT_POLL_INTERVAL,
     DEFAULT_SLAVE_ID,
+    HR_DEV_KEYS_3,
+    HR_FAN_CONFIG_2,
     HR_FAN_TARGET_1,
     HR_FAN_TARGET_2,
     HR_MAC_START,
@@ -72,6 +74,19 @@ class GTCVentHub:
         self.ip: str = host
         self.sw_version: str | None = None
         self.hw_config: str = "Стандартная"
+
+        # Автоопределяемые флаги комплектации установки
+        self.hw_detected: bool = False
+        self.heater_type: int = 1
+        self.cooler_type: int = 0
+        self.recup_type: int = 0
+        self.fan2_speeds: int = 0
+        self.has_water_heater: bool = False
+        self.has_cooler: bool = False
+        self.has_recup: bool = False
+        self.has_rotor: bool = False
+        self.has_exhaust_fan: bool = False
+        self.separate_fans: bool = False
 
     def register_listener(self, callback: Callable[[], None]) -> Callable[[], None]:
         """Регистрирует callback сущности и возвращает функцию отписки."""
@@ -217,6 +232,15 @@ class GTCVentHub:
                 cooler = (hw_val >> 4) & 0x0F
                 recup = (hw_val >> 8) & 0x0F
 
+                self.heater_type = heater
+                self.cooler_type = cooler
+                self.recup_type = recup
+                self.has_water_heater = heater in (2, 3)
+                self.has_cooler = cooler > 0
+                self.has_recup = recup > 0
+                self.has_rotor = recup == 2
+                self.hw_detected = True
+
                 parts = []
                 if heater in HEATER_MAP:
                     parts.append(HEATER_MAP[heater])
@@ -226,6 +250,30 @@ class GTCVentHub:
                     parts.append(RECUP_MAP[recup])
 
                 self.hw_config = " + ".join(parts) if parts else "Стандартная"
+            time.sleep(INTER_FRAME_DELAY)
+
+            # 4. Автоопределение 2-го вентилятора (вытяжки): PDF 0x12 (18) -> адрес 17
+            fan2_regs = self._read_registers(0x03, HR_FAN_CONFIG_2, 1)
+            if fan2_regs:
+                self.fan2_speeds = fan2_regs[0] & 0xFF
+                self.hw_detected = True
+            time.sleep(INTER_FRAME_DELAY)
+
+            # 5. Режим управления притоком и вытяжкой: PDF 0x58 (88) -> адрес 87 (Bit 10: 0 - разд., 1 - синхр.)
+            keys_regs = self._read_registers(0x03, HR_DEV_KEYS_3, 1)
+            sync_fans = False
+            if keys_regs:
+                sync_fans = bool(keys_regs[0] & (1 << 10))
+
+            self.has_exhaust_fan = (self.fan2_speeds > 0) or self.has_recup
+            self.separate_fans = self.has_exhaust_fan and not sync_fans
+            _LOGGER.info(
+                "GTC автоопределение: config='%s', fan2_speeds=%d, has_exhaust=%s, separate_fans=%s",
+                self.hw_config,
+                self.fan2_speeds,
+                self.has_exhaust_fan,
+                self.separate_fans,
+            )
         except Exception as err:
             _LOGGER.warning("Не удалось прочитать системную информацию (MAC/Прошивка/Железо): %s", err)
 

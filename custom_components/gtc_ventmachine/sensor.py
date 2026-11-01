@@ -34,6 +34,10 @@ STATE_MAP = {
 
 async def async_setup_entry(hass, entry, async_add_entities):
     hub = hass.data[DOMAIN][entry.entry_id]
+    has_exh = bool(hub.has_exhaust_fan)
+    has_water = bool(hub.has_water_heater)
+    has_recup = bool(hub.has_recup)
+    has_rotor = bool(hub.has_rotor)
 
     # 1. Основные цифровые и статусные сенсоры (адреса 0-based = адрес из PDF "Оазис v.5" - 1)
     sensors = [
@@ -41,13 +45,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
         ("t_cur", 7, "temp", UnitOfTemperature.CELSIUS, "Текущая температура", "mdi:thermometer", True),
         ("t_set", 31, "temp", UnitOfTemperature.CELSIUS, "Целевая температура", "mdi:thermometer-check", True),
         ("t_out", 11, "temp", UnitOfTemperature.CELSIUS, "Наружная температура (T3)", "mdi:thermometer", True),
-        ("t_water", 8, "temp", UnitOfTemperature.CELSIUS, "Температура обратной воды (T2)", "mdi:coolant-temperature", False),
+        ("t_water", 8, "temp", UnitOfTemperature.CELSIUS, "Температура обратной воды (T2)", "mdi:coolant-temperature", has_water),
         ("t_in", 57, "temp", UnitOfTemperature.CELSIUS, "Температура в помещении", "mdi:home-thermometer", True),
-        ("t_recup", 76, "temp", UnitOfTemperature.CELSIUS, "Температура рекуператора (T5)", "mdi:heat-wave", False),
+        ("t_recup", 76, "temp", UnitOfTemperature.CELSIUS, "Температура рекуператора (T5)", "mdi:heat-wave", has_recup),
         ("hum", 58, "as_is", PERCENTAGE, "Влажность", "mdi:water-percent", True),
         ("co2", 60, "co2", CONCENTRATION_PARTS_PER_MILLION, "Уровень CO2", "mdi:molecule-co2", False),
         ("spd", 25, "as_is", None, "Текущая скорость притока", "mdi:fan-speed-1", True),
-        ("spd_exh", 30, "as_is", None, "Текущая скорость вытяжки", "mdi:fan-speed-3", True),
+        ("spd_exh", 30, "as_is", None, "Текущая скорость вытяжки", "mdi:fan-speed-3", has_exh),
         ("spd_set", 32, "as_is", None, "Целевая скорость", "mdi:fan-speed-2", True),
         ("spd_set_exh", 33, "as_is", None, "Целевая скорость вытяжки", "mdi:fan-speed-2", False),
         ("flt", 14, "filter_pct", PERCENTAGE, "Загрязнение фильтра", "mdi:air-filter", True),
@@ -70,11 +74,11 @@ async def async_setup_entry(hass, entry, async_add_entities):
         ("f_start", 3, 3, "equal", "Запуск вентилятора", "Активно", "Покой", "mdi:fan", True),
         ("f_stop", 3, 5, "equal", "Выбег вентилятора", "Активно", "Покой", "mdi:fan-off", True),
         ("north", 3, 4, "equal", "Северный старт", "Активно", "Покой", "mdi:snowflake-alert", True),
-        ("gvs_o", 3, 8, "equal", "Клапан ГВС: Открытие", "Открывается", "Покой", "mdi:water-boiler", False),
-        ("gvs_c", 3, 9, "equal", "Клапан ГВС: Закрытие", "Закрывается", "Покой", "mdi:water-boiler-off", False),
+        ("gvs_o", 3, 8, "equal", "Клапан ГВС: Открытие", "Открывается", "Покой", "mdi:water-boiler", has_water),
+        ("gvs_c", 3, 9, "equal", "Клапан ГВС: Закрытие", "Закрывается", "Покой", "mdi:water-boiler-off", has_water),
         ("hvs_o", 3, 10, "equal", "Клапан ХВС: Открытие", "Открывается", "Покой", "mdi:water", False),
         ("hvs_c", 3, 11, "equal", "Клапан ХВС: Закрытие", "Закрывается", "Покой", "mdi:water-off", False),
-        ("rotor", 3, 12, "equal", "Разгон ротора", "Активно", "Покой", "mdi:rotate-3d-variant", True),
+        ("rotor", 3, 12, "equal", "Разгон ротора", "Активно", "Покой", "mdi:rotate-3d-variant", has_rotor),
         ("lock", 5, 64, "bit", "Блокировка пульта", "Заблокировано", "Свободно", "mdi:lock", True),
     ]
     entities.extend([GTCProcessSensor(hub, entry, *c) for c in process_configs])
