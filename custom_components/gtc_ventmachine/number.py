@@ -58,11 +58,11 @@ class GTCSupplySpeed(GTCBaseEntity, NumberEntity):
     _attr_native_min_value = 1
     _attr_native_max_value = 10
     _attr_native_step = 1
+    _attr_entity_registry_enabled_default = False
 
     def __init__(self, hub, entry):
         super().__init__(hub)
         self._attr_unique_id = f"{entry.entry_id}_supply_speed"
-        self._attr_entity_registry_enabled_default = bool(hub.separate_fans)
 
     @property
     def native_value(self) -> int | None:
@@ -84,11 +84,11 @@ class GTCExhaustSpeed(GTCBaseEntity, NumberEntity):
     _attr_native_min_value = 1
     _attr_native_max_value = 10
     _attr_native_step = 1
+    _attr_entity_registry_enabled_default = False
 
     def __init__(self, hub, entry):
         super().__init__(hub)
         self._attr_unique_id = f"{entry.entry_id}_exhaust_speed"
-        self._attr_entity_registry_enabled_default = bool(hub.separate_fans)
 
     @property
     def native_value(self) -> int | None:
