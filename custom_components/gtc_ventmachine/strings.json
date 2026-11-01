@@ -1,0 +1,37 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Подключение GTC Ventmachine",
+        "description": "Укажите параметры Modbus TCP контроллера или шлюза RS-485 (например, Promodem WiFi-485).",
+        "data": {
+          "host": "IP-адрес или хост",
+          "port": "Порт Modbus TCP",
+          "slave_id": "Адрес устройства (Slave ID)"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Укажите корректный IP-адрес или хост",
+      "invalid_port": "Порт должен быть в диапазоне 1–65535",
+      "invalid_slave": "Slave ID должен быть в диапазоне 1–247"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Параметры подключения GTC Ventmachine",
+        "data": {
+          "host": "IP-адрес или хост",
+          "port": "Порт Modbus TCP",
+          "slave_id": "Адрес устройства (Slave ID)"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Укажите корректный IP-адрес или хост",
+      "invalid_port": "Порт должен быть в диапазоне 1–65535",
+      "invalid_slave": "Slave ID должен быть в диапазоне 1–247"
+    }
+  }
+}
