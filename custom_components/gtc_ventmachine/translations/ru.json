@@ -33,5 +33,26 @@
       "invalid_port": "Порт должен быть в диапазоне 1–65535",
       "invalid_slave": "Slave ID должен быть в диапазоне 1–247"
     }
+  },
+  "entity": {
+    "climate": {
+      "climate": {
+        "name": "Климат"
+      }
+    },
+    "number": {
+      "supply_speed": {
+        "name": "Скорость притока"
+      },
+      "exhaust_speed": {
+        "name": "Скорость вытяжки"
+      }
+    },
+    "select": {
+      "poll_interval": {
+        "name": "Интервал опроса системы"
+      }
+    }
   }
 }
+

@@ -19,7 +19,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 class GTCPollIntervalSelect(GTCBaseEntity, SelectEntity, RestoreEntity):
     _attr_has_entity_name = True
-    _attr_name = "Интервал опроса системы"
+    _attr_translation_key = "poll_interval"
     _attr_icon = "mdi:timer-cog"
     _attr_entity_category = EntityCategory.DIAGNOSTIC
     _attr_options = ["2", "3", "4", "5", "6", "7", "8", "9", "10"]

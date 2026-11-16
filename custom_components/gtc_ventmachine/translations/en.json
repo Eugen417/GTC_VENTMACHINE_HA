@@ -1,0 +1,57 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect GTC Ventmachine",
+        "description": "Specify the Modbus TCP parameters of the controller or RS-485 gateway (e.g., Promodem WiFi-485 or Elfin EW11).",
+        "data": {
+          "host": "IP address or hostname",
+          "port": "Modbus TCP port",
+          "slave_id": "Device address (Slave ID)"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Please enter a valid IP address or hostname",
+      "invalid_port": "Port must be in the range 1–65535",
+      "invalid_slave": "Slave ID must be in the range 1–247"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "GTC Ventmachine connection options",
+        "data": {
+          "host": "IP address or hostname",
+          "port": "Modbus TCP port",
+          "slave_id": "Device address (Slave ID)"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Please enter a valid IP address or hostname",
+      "invalid_port": "Port must be in the range 1–65535",
+      "invalid_slave": "Slave ID must be in the range 1–247"
+    }
+  },
+  "entity": {
+    "climate": {
+      "climate": {
+        "name": "Climate"
+      }
+    },
+    "number": {
+      "supply_speed": {
+        "name": "Supply fan speed"
+      },
+      "exhaust_speed": {
+        "name": "Exhaust fan speed"
+      }
+    },
+    "select": {
+      "poll_interval": {
+        "name": "System poll interval"
+      }
+    }
+  }
+}

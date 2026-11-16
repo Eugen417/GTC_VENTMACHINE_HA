@@ -3,6 +3,8 @@ from __future__ import annotations
 import asyncio
 import logging
 
+from homeassistant.const import EVENT_HOMEASSISTANT_STOP
+
 from .const import DEFAULT_POLL_INTERVAL, DEFAULT_PORT, DEFAULT_SLAVE_ID, DOMAIN, PLATFORMS
 from .hub import GTCVentHub
 
@@ -40,6 +42,12 @@ async def async_setup_entry(hass, entry):
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     hub.poll_task = hass.async_create_background_task(dynamic_poll(), f"gtc_poll_{entry.entry_id}")
 
+    async def _async_stop(_event) -> None:
+        if hub.poll_task and not hub.poll_task.done():
+            hub.poll_task.cancel()
+        hub.close()
+
+    entry.async_on_unload(hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, _async_stop))
     entry.async_on_unload(entry.add_update_listener(update_listener))
 
     return True

@@ -28,7 +28,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 class GTCClimate(GTCBaseEntity, ClimateEntity):
     _attr_has_entity_name = True
-    _attr_name = "Климат"
+    _attr_translation_key = "climate"
 
     _attr_min_temp = 5.0
     _attr_max_temp = 30.0

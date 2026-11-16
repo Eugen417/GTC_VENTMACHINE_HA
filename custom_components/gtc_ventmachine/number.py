@@ -52,7 +52,7 @@ class GTCSupplySpeed(GTCBaseEntity, NumberEntity):
     """Ступень скорости приточного вентилятора (1–10) при раздельном управлении."""
 
     _attr_has_entity_name = True
-    _attr_name = "Скорость притока"
+    _attr_translation_key = "supply_speed"
     _attr_icon = "mdi:fan-chevron-up"
     _attr_mode = NumberMode.SLIDER
     _attr_native_min_value = 1
@@ -78,7 +78,7 @@ class GTCExhaustSpeed(GTCBaseEntity, NumberEntity):
     """Ступень скорости вытяжного вентилятора (1–10) для ПВУ с раздельным управлением."""
 
     _attr_has_entity_name = True
-    _attr_name = "Скорость вытяжки"
+    _attr_translation_key = "exhaust_speed"
     _attr_icon = "mdi:fan-chevron-down"
     _attr_mode = NumberMode.SLIDER
     _attr_native_min_value = 1
