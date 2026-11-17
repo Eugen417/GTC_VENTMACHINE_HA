@@ -23,6 +23,11 @@ class GTCBaseEntity(Entity):
         self.async_on_remove(self._hub.register_listener(self.async_write_ha_state))
 
     @property
+    def available(self) -> bool:
+        """Доступность сущности зависит от наличия связи с контроллером GTC."""
+        return self._hub.online
+
+    @property
     def device_info(self) -> dict:
         """Информация об устройстве для реестра Home Assistant."""
         hw_cfg = self._hub.hw_config or "Стандартная"

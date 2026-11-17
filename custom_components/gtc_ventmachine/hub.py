@@ -145,9 +145,10 @@ class GTCVentHub:
             _LOGGER.warning("Не удалось прочитать системную информацию (MAC/Прошивка/Железо): %s", err)
 
     async def async_update(self) -> bool:
+        was_online = self.online
         async with self._lock:
             ok = await asyncio.to_thread(self._fetch_sync)
-        if ok:
+        if ok or was_online != self.online:
             self.notify_listeners()
         return ok
 
@@ -165,6 +166,7 @@ class GTCVentHub:
                     (0x03, [(31, 3)]),
                 ]
 
+                any_read = False
                 for func, blocks in poll_map:
                     for start, count in blocks:
                         packet = struct.pack(">HHHBBHH", 0x00, 0x00, 0x06, self.slave_id, func, start, count)
@@ -174,13 +176,16 @@ class GTCVentHub:
                             payload = res[9 : 9 + (count * 2)]
                             for i in range(count):
                                 self.data[f"in_{start + i}"] = struct.unpack(">H", payload[i * 2 : i * 2 + 2])[0]
+                            any_read = True
                         time.sleep(INTER_FRAME_DELAY)
-                self.online = True
-                return True
+                if any_read:
+                    self.online = True
+                    return True
         except (socket.timeout, OSError) as err:
             _LOGGER.warning("GTC Connection/Read Error: %s", err)
         except Exception as err:
             _LOGGER.error("GTC Unexpected Error: %s", err)
+        self.online = False
         return False
 
     async def async_set_power(self, turn_on: bool) -> bool:

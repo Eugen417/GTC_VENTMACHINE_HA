@@ -36,6 +36,10 @@ class GTCPollIntervalSelect(GTCBaseEntity, SelectEntity, RestoreEntity):
             self._hub.poll_interval = int(last_state.state)
 
     @property
+    def available(self) -> bool:
+        return True
+
+    @property
     def current_option(self) -> str:
         return str(getattr(self._hub, "poll_interval", DEFAULT_POLL_INTERVAL))
 

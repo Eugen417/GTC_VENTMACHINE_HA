@@ -1,4 +1,4 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/v/release/Eugen417/GTC_VENTMACHINE_HA?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/releases)
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-compatible-blue.svg?style=for-the-badge&logo=home-assistant)](https://www.home-assistant.io/)
 [![GitHub Stars](https://img.shields.io/github/stars/Eugen417/GTC_VENTMACHINE_HA.svg?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/stargazers)
@@ -36,7 +36,7 @@
 
 ---
 
-## ✨ Возможности версии 1.3.5
+## ✨ Возможности версии 1.3.6
 
 * **Нативное управление**: Полноценные сущности `Climate` и `Fan` для интеграции в стандартные карточки Home Assistant, Apple HomeKit и Яндекс Умный Дом (с мгновенным откликом интерфейса и отображением `hvac_action`).
 * **Раздельное управление притоком и вытяжкой**: Отдельные ползунки `Скорость притока` (регистр `32`) и `Скорость вытяжки` (регистр `33`) для приточно-вытяжных установок (ПВУ). По умолчанию скрыты, чтобы не перегружать интерфейс владельцев обычных приточных установок — включаются в 1 клик в настройках объекта.
@@ -136,4 +136,4 @@
 ---
 
 **Разработчик:** [@Eugen417](https://github.com/Eugen417)
-**Версия:** 1.3.5
+**Версия:** 1.3.6

@@ -1,4 +1,4 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/v/release/Eugen417/GTC_VENTMACHINE_HA?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/releases)
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-compatible-blue.svg?style=for-the-badge&logo=home-assistant)](https://www.home-assistant.io/)
 [![GitHub Stars](https://img.shields.io/github/stars/Eugen417/GTC_VENTMACHINE_HA.svg?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/stargazers)
@@ -36,7 +36,7 @@ Custom **Home Assistant** integration for controlling **Ventmachine** supply and
 
 ---
 
-## ✨ Key Features (v1.3.5)
+## ✨ Key Features (v1.3.6)
 
 * **Native Control Entities**: Full-featured `Climate` and `Fan` entities for standard Home Assistant dashboards, Apple HomeKit, and Yandex Smart Home (with instant UI feedback and real-time `hvac_action` reporting).
 * **Independent Supply & Exhaust Fan Control**: Dedicated `Supply fan speed` (register `32`) and `Exhaust fan speed` (register `33`) sliders for heat-recovery ventilation (HRV) units. Disabled by default so supply-only systems stay uncluttered — enable in one click from entity settings.
@@ -115,5 +115,5 @@ A ready-to-use Home Assistant Blueprint is available for automatic **CO2-based v
 Distributed under the **MIT License**. See [LICENSE](LICENSE) for details.
 
 **Author:** [@Eugen417](https://github.com/Eugen417)  
-**Version:** 1.3.5
+**Version:** 1.3.6
 
