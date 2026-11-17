@@ -1,5 +1,8 @@
 {
   "name": "GTC Ventmachine",
-  "render_readme": true,
-  "country": "RU"
+  "homeassistant": "2025.8.0",
+  "hacs": "2.0.0",
+  "zip_release": true,
+  "filename": "gtc_ventmachine.zip"
 }
+

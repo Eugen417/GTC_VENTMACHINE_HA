@@ -1,6 +1,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/v/release/Eugen417/GTC_VENTMACHINE_HA?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/releases)
-[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-compatible-blue.svg?style=for-the-badge&logo=home-assistant)](https://www.home-assistant.io/)
+[![Downloads](https://img.shields.io/github/downloads/Eugen417/GTC_VENTMACHINE_HA/total?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/releases)
+[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2025.8%2B%20%7C%202026.x-blue.svg?style=for-the-badge&logo=home-assistant)](https://www.home-assistant.io/)
 [![GitHub Stars](https://img.shields.io/github/stars/Eugen417/GTC_VENTMACHINE_HA.svg?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/stargazers)
 [![License](https://img.shields.io/github/license/Eugen417/GTC_VENTMACHINE_HA.svg?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/blob/main/LICENSE)
 
@@ -10,7 +11,7 @@
 
 # GTC Ventmachine для Home Assistant
 
-Пользовательская интеграция для управления приточными и приточно-вытяжными установками **Ventmachine** (автоматика **GTC**, контроллеры **Syberia 5 / Оазис v.5**) по протоколу **Modbus TCP**.
+Пользовательская интеграция для управления приточными и приточно-вытяжными установками **Ventmachine** (автоматика **GTC**, контроллеры **Syberia 5 / Оазис v.5**) по протоколу **Modbus TCP**. Совместима с **Home Assistant 2025.8+ и 2026.x**.
 
 <p align="center">
   <img width="220" height="220" alt="GTC Ventmachine Modbus" src="custom_components/gtc_ventmachine/brand/logo.png" />
@@ -26,7 +27,7 @@
 
 [![Open your Home Assistant instance and open a repository maintainer's profile on GitHub.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Eugen417&repository=GTC_VENTMACHINE_HA&category=Integration)
 
-1. **HACS**: Нажмите кнопку выше или добавьте репозиторий `https://github.com/Eugen417/GTC_VENTMACHINE_HA` в *Пользовательские репозитории (Custom Repositories)* с типом **Интеграция (Integration)**.
+1. **HACS / Marketplace**: Нажмите кнопку выше или откройте **HACS / Marketplace** в Home Assistant, найдите в поиске **GTC Ventmachine** и нажмите **Скачать**.
 2. **Перезапуск**: Перезапустите Home Assistant после скачивания интеграции.
 3. **Добавление устройства**: Перейдите в *«Настройки» → «Устройства и службы» → «Добавить интеграцию»*, найдите **GTC Ventmachine** и укажите:
    * **IP-адрес или хост** контроллера (или шлюза RS-485).
@@ -36,7 +37,7 @@
 
 ---
 
-## ✨ Возможности версии 1.3.6
+## ✨ Возможности версии 1.3.7
 
 * **Нативное управление**: Полноценные сущности `Climate` и `Fan` для интеграции в стандартные карточки Home Assistant, Apple HomeKit и Яндекс Умный Дом (с мгновенным откликом интерфейса и отображением `hvac_action`).
 * **Раздельное управление притоком и вытяжкой**: Отдельные ползунки `Скорость притока` (регистр `32`) и `Скорость вытяжки` (регистр `33`) для приточно-вытяжных установок (ПВУ). По умолчанию скрыты, чтобы не перегружать интерфейс владельцев обычных приточных установок — включаются в 1 клик в настройках объекта.
@@ -136,4 +137,4 @@
 ---
 
 **Разработчик:** [@Eugen417](https://github.com/Eugen417)
-**Версия:** 1.3.6
+**Версия:** 1.3.7

@@ -5,8 +5,7 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorStateClass,
 )
-from homeassistant.const import PERCENTAGE, UnitOfTemperature
-from homeassistant.helpers.entity import EntityCategory
+from homeassistant.const import EntityCategory, PERCENTAGE, UnitOfTemperature
 
 from .const import DOMAIN
 from .entity import GTCBaseEntity

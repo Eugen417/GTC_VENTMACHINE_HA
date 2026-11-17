@@ -1,6 +1,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/v/release/Eugen417/GTC_VENTMACHINE_HA?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/releases)
-[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-compatible-blue.svg?style=for-the-badge&logo=home-assistant)](https://www.home-assistant.io/)
+[![Downloads](https://img.shields.io/github/downloads/Eugen417/GTC_VENTMACHINE_HA/total?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/releases)
+[![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2025.8%2B%20%7C%202026.x-blue.svg?style=for-the-badge&logo=home-assistant)](https://www.home-assistant.io/)
 [![GitHub Stars](https://img.shields.io/github/stars/Eugen417/GTC_VENTMACHINE_HA.svg?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/stargazers)
 [![License](https://img.shields.io/github/license/Eugen417/GTC_VENTMACHINE_HA.svg?style=for-the-badge)](https://github.com/Eugen417/GTC_VENTMACHINE_HA/blob/main/LICENSE)
 
@@ -10,7 +11,7 @@
 
 # GTC Ventmachine Integration for Home Assistant
 
-Custom **Home Assistant** integration for controlling **Ventmachine** supply and heat-recovery ventilation units (**GTC** automation, **Syberia 5 / Oasis v.5** controllers) over **Modbus TCP**.
+Custom **Home Assistant** integration for controlling **Ventmachine** supply and heat-recovery ventilation units (**GTC** automation, **Syberia 5 / Oasis v.5** controllers) over **Modbus TCP**. Compatible with **Home Assistant 2025.8+ and 2026.x**.
 
 <p align="center">
   <img width="220" height="220" alt="GTC Ventmachine Modbus" src="custom_components/gtc_ventmachine/brand/logo.png" />
@@ -26,7 +27,7 @@ Custom **Home Assistant** integration for controlling **Ventmachine** supply and
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Eugen417&repository=GTC_VENTMACHINE_HA&category=Integration)
 
-1. **HACS**: Click the button above or add `https://github.com/Eugen417/GTC_VENTMACHINE_HA` under *Custom Repositories* as category **Integration**.
+1. **HACS / Marketplace**: Click the button above or open **HACS / Marketplace** in Home Assistant, search for **GTC Ventmachine**, and click **Download**.
 2. **Restart**: Restart Home Assistant after downloading the integration.
 3. **Add Device**: Go to *Settings → Devices & Services → Add Integration*, search for **GTC Ventmachine**, and enter:
    * **IP address or hostname** of the controller (or RS-485 gateway).
@@ -36,7 +37,7 @@ Custom **Home Assistant** integration for controlling **Ventmachine** supply and
 
 ---
 
-## ✨ Key Features (v1.3.6)
+## ✨ Key Features (v1.3.7)
 
 * **Native Control Entities**: Full-featured `Climate` and `Fan` entities for standard Home Assistant dashboards, Apple HomeKit, and Yandex Smart Home (with instant UI feedback and real-time `hvac_action` reporting).
 * **Independent Supply & Exhaust Fan Control**: Dedicated `Supply fan speed` (register `32`) and `Exhaust fan speed` (register `33`) sliders for heat-recovery ventilation (HRV) units. Disabled by default so supply-only systems stay uncluttered — enable in one click from entity settings.
@@ -115,5 +116,5 @@ A ready-to-use Home Assistant Blueprint is available for automatic **CO2-based v
 Distributed under the **MIT License**. See [LICENSE](LICENSE) for details.
 
 **Author:** [@Eugen417](https://github.com/Eugen417)  
-**Version:** 1.3.6
+**Version:** 1.3.7
 
